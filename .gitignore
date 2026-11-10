@@ -1,0 +1,7 @@
+.env
+system
+.vscode
+*.pyc
+__pycache__/
+node_modules/
+CaddyFile
