@@ -11,6 +11,7 @@ import { LoginPage } from '@/pages/LoginPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
 import { RouteErrorPage } from '@/pages/RouteErrorPage'
+import { CataloguePage } from '@/pages/student/CataloguePage'
 import type { RouteHandle } from '@/types/navigation'
 import { paths } from './paths'
 
@@ -66,13 +67,7 @@ export const routes: RouteObject[] = [
               {
                 path: paths.student.catalogue,
                 handle: handle({ title: 'Catalogue des destinations', crumb: 'Catalogue' }),
-                element: (
-                  <PlaceholderPage
-                    space={studentSpace}
-                    title="Catalogue des destinations"
-                    description="Consulter les universités partenaires fictives et leurs informations."
-                  />
-                ),
+                element: <CataloguePage />,
               },
               {
                 path: paths.student.wishes,

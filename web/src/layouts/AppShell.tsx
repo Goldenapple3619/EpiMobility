@@ -5,6 +5,7 @@ import { paths } from '@/app/paths'
 import { BrandMark } from '@/components/BrandMark'
 import type { NavigationItem } from '@/types/navigation'
 import { Breadcrumb } from './Breadcrumb'
+import { MockModeBanner } from './MockModeBanner'
 import { SessionStatus } from './SessionStatus'
 import { MAIN_CONTENT_ID, SkipLink } from './SkipLink'
 import { useDocumentTitle } from './useDocumentTitle'
@@ -33,6 +34,7 @@ export function AppShell({
   return (
     <div className="page-shell">
       <SkipLink />
+      <MockModeBanner />
 
       <header className="site-header">
         <div
