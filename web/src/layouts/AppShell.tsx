@@ -5,6 +5,7 @@ import { paths } from '@/app/paths'
 import { BrandMark } from '@/components/BrandMark'
 import type { NavigationItem } from '@/types/navigation'
 import { Breadcrumb } from './Breadcrumb'
+import { footerNavigation } from './navigation'
 import { MockModeBanner } from './MockModeBanner'
 import { SessionStatus } from './SessionStatus'
 import { MAIN_CONTENT_ID, SkipLink } from './SkipLink'
@@ -73,10 +74,21 @@ export function AppShell({
 
       <footer className="site-footer">
         <div className="container site-footer__inner">
-          <p>{brand.institutionName}</p>
-          <p>
-            <strong>{brand.disclaimer}</strong>
-          </p>
+          <div>
+            <p>{brand.institutionName}</p>
+            <p className="site-footer__disclaimer">
+              <strong>{brand.disclaimer}</strong>
+            </p>
+          </div>
+          <nav aria-label="Liens du pied de page">
+            <ul className="site-footer__links">
+              {footerNavigation.map((item) => (
+                <li key={item.href}>
+                  <Link to={item.href}>{item.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </footer>
     </div>
