@@ -6,6 +6,8 @@ export const paths = {
   home: '/',
   login: '/connexion',
   forbidden: '/acces-interdit',
+  /** Catalogue interne des composants UI, volontairement absent des menus. */
+  componentCatalog: '/composants',
   student: {
     root: '/etudiant',
     catalogue: '/etudiant/catalogue',

@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router'
 import { paths } from '@/app/paths'
+import { Button } from '@/components/ui'
 import { roleLabels } from '@/features/auth/session'
 import { useSession } from '@/features/auth/useSession'
 
@@ -24,13 +25,13 @@ export function SessionStatus() {
   return (
     <div className="session-status">
       <p className="session-status__label">
-        <span className="visually-hidden">Session de démonstration : </span>
+        <span className="visually-hidden">Session de démonstration :</span>{' '}
         <span aria-hidden="true">Démo · </span>
         {roleLabels[session.role]}
       </p>
-      <button type="button" className="session-status__button" onClick={handleSignOut}>
+      <Button variant="secondary" size="sm" onClick={handleSignOut}>
         Se déconnecter
-      </button>
+      </Button>
     </div>
   )
 }

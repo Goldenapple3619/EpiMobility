@@ -4,6 +4,7 @@ import { AdminLayout } from '@/layouts/AdminLayout'
 import { PublicLayout } from '@/layouts/PublicLayout'
 import { RootRoute } from '@/layouts/RootRoute'
 import { StudentLayout } from '@/layouts/StudentLayout'
+import { ComponentCatalogPage } from '@/pages/ComponentCatalogPage'
 import { ForbiddenPage } from '@/pages/ForbiddenPage'
 import { HomePage } from '@/pages/HomePage'
 import { LoginPage } from '@/pages/LoginPage'
@@ -34,6 +35,11 @@ export const routes: RouteObject[] = [
             path: paths.forbidden,
             element: <ForbiddenPage />,
             handle: handle({ title: 'Accès interdit' }),
+          },
+          {
+            path: paths.componentCatalog,
+            element: <ComponentCatalogPage />,
+            handle: handle({ title: 'Catalogue des composants' }),
           },
           { path: '*', element: <NotFoundPage />, handle: handle({ title: 'Page introuvable' }) },
         ],
