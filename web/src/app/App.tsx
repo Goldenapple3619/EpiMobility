@@ -1,5 +1,14 @@
-import { HomePage } from '@/pages/HomePage'
+import { useState } from 'react'
+import { createBrowserRouter, RouterProvider } from 'react-router'
+import { SessionProvider } from '@/features/auth/SessionProvider'
+import { routerBasename, routes } from './routes'
 
 export function App() {
-  return <HomePage />
+  const [router] = useState(() => createBrowserRouter(routes, { basename: routerBasename() }))
+
+  return (
+    <SessionProvider>
+      <RouterProvider router={router} />
+    </SessionProvider>
+  )
 }

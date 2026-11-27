@@ -11,6 +11,7 @@ Les interfaces étudiant et administration consomment la même API REST que l'ap
 | --- | --- |
 | `src/app/` | Point d'entrée applicatif, configuration et providers globaux |
 | `src/pages/` | Pages assemblées depuis les fonctionnalités et composants |
+| `src/layouts/` | Layouts public, étudiant et administration (en-tête, menus, fil d'Ariane) |
 | `src/features/` | Fonctionnalités métier autonomes (catalogue, vœux, administration) |
 | `src/components/` | Composants UI réutilisables, sans accès direct à l'API |
 | `src/hooks/` | Hooks React réutilisables |
@@ -19,6 +20,7 @@ Les interfaces étudiant et administration consomment la même API REST que l'ap
 | `src/styles/` | Styles transversaux et tokens du design system |
 | `src/types/` | Types partagés par plusieurs fonctionnalités |
 | `src/mocks/` | Données de démonstration séparées de l'API réelle |
+| `src/test/` | Configuration et utilitaires de test (Vitest, Testing Library) |
 
 ## Conventions
 
@@ -31,6 +33,25 @@ Les interfaces étudiant et administration consomment la même API REST que l'ap
 - **Données :** ne jamais présenter comme réels des établissements ou coûts inventés ; sourcer les destinations réelles.
 - **Sécurité :** ne stocker aucun secret dans les variables client `VITE_`; les contrôles d'autorisation restent obligatoires côté API.
 - **Accessibilité :** HTML sémantique, libellés explicites, navigation clavier, focus visible, WCAG 2.2 AA.
+
+## Routage
+
+- Routeur : React Router (`createBrowserRouter`), configuration dans `src/app/routes.tsx`.
+- **Routes nommées :** toute URL interne provient de `src/app/paths.ts` ; ne pas écrire de chemin en dur.
+- Chaque route déclare `handle.title` (titre d'onglet) et, dans les espaces connectés, `handle.crumb` (fil d'Ariane).
+- Les menus utilisent `NavLink` : le lien actif reçoit `aria-current="page"` et un soulignement visible.
+- Au changement de page, le focus est placé sur `<main id="main-content">`.
+- `RequireRole` n'affiche un espace qu'au rôle prévu ; un écran refusé n'est jamais monté.
+  **Ce n'est pas une mesure de sécurité** : l'API doit authentifier et autoriser chaque requête.
+- La session actuelle est une **session de démonstration** (choix du profil sur `/connexion`),
+  à remplacer par l'authentification fournie par l'API.
+
+### Prérequis d'hébergement (à coordonner avec le pôle Infrastructure)
+
+- Le serveur doit renvoyer `index.html` pour toute URL de l'application (fallback SPA),
+  sinon un rechargement de `/etudiant/catalogue` renvoie une 404 serveur.
+- Si l'application est servie sous un préfixe (ex. `/panel/`), le définir via l'option `base`
+  de Vite : le routeur l'utilise automatiquement comme `basename`.
 
 ## Créer une page ou un composant
 
@@ -50,8 +71,12 @@ npm run dev
 npm run lint
 npm run format:check
 npm run typecheck
+npm run test
 npm run build
 ```
+
+Les tests (`*.test.ts(x)`) utilisent Vitest, jsdom et Testing Library. Privilégier les requêtes
+par rôle et nom accessible (`getByRole`) et `user-event` pour simuler clavier et souris.
 
 Pour corriger uniquement le formatage des sources et configurations : `npm run format`.
 
