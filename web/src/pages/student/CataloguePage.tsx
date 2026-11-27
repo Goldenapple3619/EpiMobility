@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
 import { useSearchParams } from 'react-router'
 import { Badge, Button, Table, TextField, type TableColumn } from '@/components/ui'
 import { formatLanguages } from '@/features/catalogue/languages'
@@ -27,6 +27,8 @@ const columns: readonly TableColumn<University>[] = [
   { key: 'seats', header: 'Places', align: 'end', render: (university) => university.seats },
 ]
 
+const SEARCH_INPUT_ID = 'catalogue-search'
+
 function readPage(value: string | null): number {
   const page = Number(value)
   return Number.isInteger(page) && page > 0 ? page : 1
@@ -38,6 +40,9 @@ export function CataloguePage() {
   const page = readPage(searchParams.get('page'))
   const [draft, setDraft] = useState(search)
   const catalogue = useUniversityCatalogue(search, page)
+  // Les boutons de pagination, « Effacer » et « Réessayer » disparaissent pendant le
+  // rechargement : le focus est déplacé sur un élément stable pour ne pas retomber sur <body>.
+  const resultsRef = useRef<HTMLDivElement>(null)
 
   function updateParams(next: { q?: string; page?: number }) {
     const params = new URLSearchParams()
@@ -56,6 +61,17 @@ export function CataloguePage() {
   function clearSearch() {
     setDraft('')
     updateParams({ q: '', page: 1 })
+    document.getElementById(SEARCH_INPUT_ID)?.focus()
+  }
+
+  function goToPage(nextPage: number) {
+    updateParams({ page: nextPage })
+    resultsRef.current?.focus()
+  }
+
+  function retry() {
+    catalogue.retry()
+    resultsRef.current?.focus()
   }
 
   const result = catalogue.status === 'success' ? catalogue.data : null
@@ -72,6 +88,7 @@ export function CataloguePage() {
 
         <form className="catalogue__search" role="search" onSubmit={handleSearch}>
           <TextField
+            id={SEARCH_INPUT_ID}
             label="Rechercher une destination"
             type="search"
             hint="Nom de l’établissement ou de la ville."
@@ -101,7 +118,8 @@ export function CataloguePage() {
           getRowKey={(university) => university.id}
           isLoading={catalogue.status === 'loading'}
           error={catalogue.status === 'error' ? catalogue.error : null}
-          onRetry={catalogue.retry}
+          onRetry={retry}
+          regionRef={resultsRef}
           emptyTitle="Aucune destination trouvée"
           emptyDescription={
             search
@@ -116,7 +134,7 @@ export function CataloguePage() {
               variant="secondary"
               size="sm"
               disabled={result.page <= 1}
-              onClick={() => updateParams({ page: result.page - 1 })}
+              onClick={() => goToPage(result.page - 1)}
             >
               Page précédente
             </Button>
@@ -127,7 +145,7 @@ export function CataloguePage() {
               variant="secondary"
               size="sm"
               disabled={result.page >= result.totalPages}
-              onClick={() => updateParams({ page: result.page + 1 })}
+              onClick={() => goToPage(result.page + 1)}
             >
               Page suivante
             </Button>
