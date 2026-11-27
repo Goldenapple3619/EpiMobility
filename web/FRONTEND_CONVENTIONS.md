@@ -53,6 +53,31 @@ Les interfaces étudiant et administration consomment la même API REST que l'ap
 - Si l'application est servie sous un préfixe (ex. `/panel/`), le définir via l'option `base`
   de Vite : le routeur l'utilise automatiquement comme `basename`.
 
+## Bibliothèque de composants UI
+
+Les composants partagés sont dans `src/components/ui/` et s'importent depuis `@/components/ui`.
+Leur démonstration (tous les états) est visible sur la route interne **`/composants`**,
+volontairement absente des menus.
+
+| Besoin | Composant |
+| --- | --- |
+| Action | `Button` (`primary`, `secondary`, `ghost`, `danger` ; `isLoading`, `disabled`) |
+| Navigation | `TextLink` (interne ou `external`), `ButtonLink` |
+| Saisie | `TextField`, `SelectField`, `Checkbox`, `RadioGroup` (props `label`/`legend`, `hint`, `error`, `required`) |
+| Validation | `ErrorSummary` + messages de `@/lib/validation` |
+| Présentation | `Card`, `Badge`, `Table` (états chargement/erreur/vide intégrés) |
+| Retour utilisateur | `Alert` (en ligne), `useToast` (notifications), `Modal` |
+| États | `LoadingState`, `EmptyState`, `ErrorState` (avec « Réessayer ») |
+
+Règles :
+
+- Ne pas recréer un bouton, un champ ou une alerte avec des classes ad hoc : étendre le composant.
+- Une erreur s'affiche toujours avec une icône **et** un texte (préfixe « Erreur : »), jamais par la seule couleur.
+- Les composants UI n'appellent jamais l'API ; ils reçoivent données et callbacks en props.
+- Les couleurs d'état sont des tokens (`--color-danger`, `--color-success`…) dont le contraste est documenté dans `tokens.css`.
+- Les tests d'accessibilité utilisent `expectNoAxeViolations` (`src/test/axe.ts`) ; le contraste n'étant pas
+  calculé par jsdom, il se vérifie dans un navigateur.
+
 ## Créer une page ou un composant
 
 1. Créer la page en `src/pages/NouvellePage.tsx` ou un composant en `src/components/NouveauComposant.tsx`.

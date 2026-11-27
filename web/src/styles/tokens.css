@@ -12,6 +12,20 @@
   --color-surface: #ffffff;
   --color-surface-muted: #eff5f3;
   --color-outline: #cbd8d5;
+  --color-field-border: #6b8a92; /* 3,7:1 sur blanc, contour de contrôle (WCAG 1.4.11) */
+  --color-disabled: #5c6f75;
+  --color-disabled-surface: #e6ecea;
+
+  /* États (texte ≥ 5,8:1 sur leur surface) */
+  --color-danger: #a3262a;
+  --color-danger-hover: #861f22;
+  --color-danger-surface: #fcefef;
+  --color-success: #1e6b3c;
+  --color-success-surface: #eaf5ee;
+  --color-warning: #7a4a00;
+  --color-warning-surface: #fff4e0;
+  --color-info: #0b5e5c;
+  --color-info-surface: #eff5f3;
 
   /* Layout */
   --font-ui:

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router'
+import { ToastProvider } from '@/components/ui'
 import { SessionProvider } from '@/features/auth/SessionProvider'
 import { routerBasename, routes } from './routes'
 
@@ -8,7 +9,9 @@ export function App() {
 
   return (
     <SessionProvider>
-      <RouterProvider router={router} />
+      <ToastProvider>
+        <RouterProvider router={router} />
+      </ToastProvider>
     </SessionProvider>
   )
 }

@@ -1,6 +1,7 @@
 import { useId, useState, type FormEvent } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import { paths } from '@/app/paths'
+import { Alert, Button, ButtonLink, RadioGroup } from '@/components/ui'
 import { roleLabels, type Role } from '@/features/auth/session'
 import { useSession } from '@/features/auth/useSession'
 
@@ -44,17 +45,18 @@ export function LoginPage() {
         <span className="eyebrow">Accès aux espaces</span>
         <h1 id="login-title">Connexion de démonstration</h1>
 
-        <div className="notice" id={noticeId}>
-          <p>
-            <strong>Aucune authentification réelle.</strong> Ce choix de profil sert uniquement à
-            parcourir les interfaces pendant le développement. Il ne donne accès à aucune donnée :
-            l’authentification et le contrôle des droits seront assurés par l’API (mécanisme à
-            définir avec le pôle Backend).
-          </p>
+        <div id={noticeId} className="login-notice">
+          <Alert tone="warning" title="Aucune authentification réelle">
+            Ce choix de profil sert uniquement à parcourir les interfaces pendant le développement.
+            Il ne donne accès à aucune donnée : l’authentification et le contrôle des droits seront
+            assurés par l’API (mécanisme à définir avec le pôle Backend).
+          </Alert>
         </div>
 
         {redirectTarget ? (
-          <p role="status">Connectez-vous avec un profil autorisé pour accéder à cette page.</p>
+          <Alert tone="info" live>
+            Connectez-vous avec un profil autorisé pour accéder à cette page.
+          </Alert>
         ) : null}
 
         {session ? (
@@ -63,34 +65,25 @@ export function LoginPage() {
               Session de démonstration active : <strong>{roleLabels[session.role]}</strong>.
             </p>
             <p className="login-current__actions">
-              <Link className="button-primary" to={homeByRole[session.role]}>
-                Ouvrir mon espace
-              </Link>
-              <button type="button" className="button-secondary" onClick={signOut}>
+              <ButtonLink to={homeByRole[session.role]}>Ouvrir mon espace</ButtonLink>
+              <Button variant="secondary" onClick={signOut}>
                 Se déconnecter
-              </button>
+              </Button>
             </p>
           </div>
         ) : (
           <form className="login-form" onSubmit={handleSubmit} aria-describedby={noticeId}>
-            <fieldset>
-              <legend>Choisissez un profil de démonstration</legend>
-              {(Object.keys(roleLabels) as Role[]).map((value) => (
-                <label key={value} className="choice">
-                  <input
-                    type="radio"
-                    name="role"
-                    value={value}
-                    checked={role === value}
-                    onChange={() => setRole(value)}
-                  />
-                  {roleLabels[value]}
-                </label>
-              ))}
-            </fieldset>
-            <button type="submit" className="button-primary">
-              Ouvrir la session de démonstration
-            </button>
+            <RadioGroup
+              legend="Choisissez un profil de démonstration"
+              name="role"
+              value={role}
+              onChange={setRole}
+              options={(Object.keys(roleLabels) as Role[]).map((value) => ({
+                value,
+                label: roleLabels[value],
+              }))}
+            />
+            <Button type="submit">Ouvrir la session de démonstration</Button>
           </form>
         )}
       </div>

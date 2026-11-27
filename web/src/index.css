@@ -1,6 +1,7 @@
 @import './styles/tokens.css';
 @import './styles/brand.css';
 @import './styles/layout.css';
+@import './styles/components.css';
 
 * {
   box-sizing: border-box;
@@ -36,7 +37,8 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
-summary:focus-visible {
+summary:focus-visible,
+[tabindex]:not([tabindex='-1']):focus-visible {
   outline: 3px solid var(--color-primary);
   outline-offset: 4px;
 }

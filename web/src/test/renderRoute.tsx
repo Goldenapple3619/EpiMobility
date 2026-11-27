@@ -3,6 +3,7 @@ import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 import { routes } from '@/app/routes'
+import { ToastProvider } from '@/components/ui'
 import { SessionProvider } from '@/features/auth/SessionProvider'
 import { createDemoSession, type Role } from '@/features/auth/session'
 
@@ -18,7 +19,9 @@ export function renderRoute(url: string, { role = null }: RenderRouteOptions = {
   const view = render(
     <StrictMode>
       <SessionProvider initialSession={role ? createDemoSession(role) : null}>
-        <RouterProvider router={router} />
+        <ToastProvider>
+          <RouterProvider router={router} />
+        </ToastProvider>
       </SessionProvider>
     </StrictMode>,
   )
