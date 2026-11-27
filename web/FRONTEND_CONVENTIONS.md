@@ -44,7 +44,8 @@ Les interfaces étudiant et administration consomment la même API REST que l'ap
 - `RequireRole` n'affiche un espace qu'au rôle prévu ; un écran refusé n'est jamais monté.
   **Ce n'est pas une mesure de sécurité** : l'API doit authentifier et autoriser chaque requête.
 - La session actuelle est une **session de démonstration** (choix du profil sur `/connexion`),
-  à remplacer par l'authentification fournie par l'API.
+  disponible **uniquement en mode mock**. En mode `http` (production), aucun accès simulé n'est
+  possible ; elle sera remplacée par l'authentification fournie par l'API.
 
 ### Prérequis d'hébergement (à coordonner avec le pôle Infrastructure)
 
@@ -60,6 +61,8 @@ Les interfaces étudiant et administration consomment la même API REST que l'ap
 - Ne jamais appeler `fetch` directement : passer par le client centralisé `src/services/http/httpClient.ts`.
 - `VITE_API_MODE=mock` (activé par `.env.development`) sert des données fictives locales et affiche
   un bandeau « Mode démonstration » ; `http` interroge `VITE_API_BASE_URL`. Aucun repli automatique.
+- Le mode mock est **interdit en production** et exclu du bundle. Seul `services/api/mockApi.ts`
+  importe `src/mocks/` (test `mockIsolation.test.ts`) ; `npm run check:bundle` contrôle `dist/`.
 - Les types métier (`src/types/domain.ts`) et les routes sont **provisoires** : voir
   [`API_CONTRACTS.md`](./API_CONTRACTS.md), notamment la liste des points à valider avec le Backend.
 - Variables `VITE_*` documentées dans `.env.example` : elles sont publiques, aucun secret.
@@ -83,6 +86,8 @@ volontairement absente des menus.
 Règles :
 
 - Ne pas recréer un bouton, un champ ou une alerte avec des classes ad hoc : étendre le composant.
+- Quand un élément focalisé disparaît (alerte ou notification fermée, déconnexion), le focus est
+  déplacé vers un élément stable ; il ne doit jamais retomber sur `<body>`.
 - Une erreur s'affiche toujours avec une icône **et** un texte (préfixe « Erreur : »), jamais par la seule couleur.
 - Les composants UI n'appellent jamais l'API ; ils reçoivent données et callbacks en props.
 - Les couleurs d'état sont des tokens (`--color-danger`, `--color-success`…) dont le contraste est documenté dans `tokens.css`.
@@ -109,6 +114,7 @@ npm run format:check
 npm run typecheck
 npm run test
 npm run build
+npm run check:bundle   # après le build : aucune donnée mock dans dist/
 ```
 
 Les tests (`*.test.ts(x)`) utilisent Vitest, jsdom et Testing Library. Privilégier les requêtes

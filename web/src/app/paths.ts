@@ -4,6 +4,8 @@
  */
 export const paths = {
   home: '/',
+  about: '/presentation',
+  help: '/aide',
   login: '/connexion',
   forbidden: '/acces-interdit',
   /** Catalogue interne des composants UI, volontairement absent des menus. */

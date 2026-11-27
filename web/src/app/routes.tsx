@@ -4,7 +4,9 @@ import { AdminLayout } from '@/layouts/AdminLayout'
 import { PublicLayout } from '@/layouts/PublicLayout'
 import { RootRoute } from '@/layouts/RootRoute'
 import { StudentLayout } from '@/layouts/StudentLayout'
+import { AboutPage } from '@/pages/AboutPage'
 import { ComponentCatalogPage } from '@/pages/ComponentCatalogPage'
+import { HelpPage } from '@/pages/HelpPage'
 import { ForbiddenPage } from '@/pages/ForbiddenPage'
 import { HomePage } from '@/pages/HomePage'
 import { LoginPage } from '@/pages/LoginPage'
@@ -31,6 +33,8 @@ export const routes: RouteObject[] = [
         element: <PublicLayout />,
         children: [
           { path: paths.home, element: <HomePage />, handle: handle({ title: 'Accueil' }) },
+          { path: paths.about, element: <AboutPage />, handle: handle({ title: 'Présentation' }) },
+          { path: paths.help, element: <HelpPage />, handle: handle({ title: 'Aide' }) },
           { path: paths.login, element: <LoginPage />, handle: handle({ title: 'Connexion' }) },
           {
             path: paths.forbidden,

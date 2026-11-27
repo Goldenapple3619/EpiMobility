@@ -380,3 +380,139 @@
     left: 0.8rem;
   }
 }
+
+/* Boussole superposée à l'anneau (auparavant empilés l'un sous l'autre dans la grille). */
+.hero-art > .hero-art__ring,
+.hero-art > .hero-art__compass {
+  grid-area: 1 / 1;
+}
+
+/* Pastilles de la palette : classes plutôt que styles en ligne (CSP style-src 'self'). */
+.color-palette {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.color-palette__item {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1);
+}
+
+.color-palette__name {
+  font-size: 0.8rem;
+  font-weight: 650;
+  color: var(--color-ink);
+}
+
+.color-swatch--primary {
+  background-color: #0b5e5c;
+}
+
+.color-swatch--ink {
+  background-color: #143440;
+}
+
+.color-swatch--sand {
+  background-color: #d3a76d;
+}
+
+.color-swatch--mist {
+  background-color: #eff5f3;
+}
+
+/* Mention obligatoire « Projet pédagogique : partenariats fictifs ». */
+.disclaimer-callout {
+  max-width: 62ch;
+  margin: var(--space-6) 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-warning);
+  border-inline-start: 6px solid var(--color-warning);
+  border-radius: var(--radius-sm);
+  background: var(--color-warning-surface);
+  color: var(--color-ink);
+}
+
+.disclaimer-callout p {
+  margin: 0;
+}
+
+.disclaimer-callout strong {
+  color: var(--color-warning);
+}
+
+.access-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: var(--space-6);
+}
+
+.info-page h1 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  letter-spacing: -0.025em;
+}
+
+.info-section {
+  max-width: 75ch;
+  padding-top: var(--space-8);
+}
+
+.info-section h2 {
+  font-size: 1.6rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.info-grid > li,
+.info-grid .card {
+  height: 100%;
+}
+
+.steps {
+  display: grid;
+  gap: var(--space-3);
+  padding-left: 1.4rem;
+}
+
+.info-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.site-footer__inner {
+  align-items: flex-start;
+}
+
+.site-footer .site-footer__disclaimer {
+  margin-top: var(--space-2);
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #fff;
+  font-weight: 650;
+}
+
+.site-footer a:focus-visible {
+  outline-color: #fff;
+}

@@ -22,15 +22,29 @@ export class ApiConfigError extends Error {
   }
 }
 
+type ReadApiConfigOptions = Readonly<{
+  /** Build de production : le mode mock y est interdit. */
+  production?: boolean
+}>
+
 /**
  * Lit la configuration de l'API. Le mode mock doit être choisi explicitement
  * (`VITE_API_MODE=mock`) : il n'y a jamais de bascule automatique vers les données fictives.
+ * Il est refusé dans un build de production : ni données fictives, ni session simulée.
  */
-export function readApiConfig(env: ApiEnv = import.meta.env): ApiConfig {
+export function readApiConfig(
+  env: ApiEnv = import.meta.env,
+  { production = import.meta.env.PROD }: ReadApiConfigOptions = {},
+): ApiConfig {
   const rawMode = env.VITE_API_MODE?.trim() || 'http'
   if (rawMode !== 'mock' && rawMode !== 'http') {
     throw new ApiConfigError(
       `VITE_API_MODE invalide : « ${rawMode} ». Valeurs acceptées : « mock » ou « http ».`,
+    )
+  }
+  if (rawMode === 'mock' && production) {
+    throw new ApiConfigError(
+      'VITE_API_MODE=mock est interdit dans un build de production. Utilisez « http ».',
     )
   }
 

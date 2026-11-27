@@ -129,10 +129,13 @@ describe('navigation au clavier', () => {
     await user.tab() // lien d'évitement
     await user.tab()
     expect(screen.getByRole('link', { name: /retour à l’accueil/ })).toHaveFocus()
+    const nav = screen.getByRole('navigation', { name: 'Navigation principale' })
+    for (const name of ['Accueil', 'Présentation', 'Aide', 'Espace étudiant', 'Administration']) {
+      await user.tab()
+      expect(within(nav).getByRole('link', { name })).toHaveFocus()
+    }
     await user.tab()
-    expect(screen.getByRole('link', { name: 'Accueil' })).toHaveFocus()
-    await user.tab()
-    expect(screen.getByRole('link', { name: 'Espace étudiant' })).toHaveFocus()
+    expect(screen.getByRole('link', { name: /Connexion/ })).toHaveFocus()
   })
 
   it('active un lien de menu avec Entrée et déplace le focus sur le contenu', async () => {

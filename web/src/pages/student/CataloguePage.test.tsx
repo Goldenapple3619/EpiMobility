@@ -65,14 +65,14 @@ describe('Catalogue étudiant (mode mock, sans serveur)', () => {
     )
     const api: EpiMobilityApi = {
       ...mock,
-      mode: 'http',
+      // Mode mock avec panne simulée : en mode http, l'espace étudiant est inaccessible tant
+      // que l'authentification réelle n'existe pas.
       universities: { ...mock.universities, list },
     }
 
     const { user } = renderRoute(paths.student.catalogue, { role: 'student', api })
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Impossible de joindre le serveur.')
-    expect(screen.queryByRole('note', { name: 'Mode démonstration' })).not.toBeInTheDocument()
 
     serverDown = false
     const callsBeforeRetry = list.mock.calls.length

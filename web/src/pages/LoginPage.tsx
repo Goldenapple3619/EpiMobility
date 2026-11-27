@@ -1,4 +1,4 @@
-import { useId, useState, type FormEvent } from 'react'
+import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { paths } from '@/app/paths'
 import { Alert, Button, ButtonLink, RadioGroup } from '@/components/ui'
@@ -23,13 +23,58 @@ function isTargetAllowed(target: string, role: Role): boolean {
   return true
 }
 
+const ROLE_ID_PREFIX = 'login-role'
+
+/** Mode `http` : aucune connexion simulée, les espaces protégés restent inaccessibles. */
+function LoginUnavailable() {
+  return (
+    <section className="section page-section" aria-labelledby="login-title">
+      <div className="container page-section__narrow">
+        <span className="eyebrow">Accès aux espaces</span>
+        <h1 id="login-title">Connexion</h1>
+        <Alert tone="info" title="Connexion bientôt disponible">
+          L’authentification sera fournie par l’API (mécanisme en cours de définition avec le pôle
+          Backend). D’ici là, les espaces étudiant et administration ne sont pas accessibles.
+        </Alert>
+        <p className="login-current__actions">
+          <ButtonLink to={paths.home} variant="secondary">
+            Revenir à l’accueil
+          </ButtonLink>
+          <ButtonLink to={paths.help} variant="ghost">
+            Consulter l’aide
+          </ButtonLink>
+        </p>
+      </div>
+    </section>
+  )
+}
+
 export function LoginPage() {
+  const { demoEnabled } = useSession()
+  return demoEnabled ? <DemoLogin /> : <LoginUnavailable />
+}
+
+function DemoLogin() {
   const { session, signIn, signOut } = useSession()
   const navigate = useNavigate()
   const location = useLocation()
   const [role, setRole] = useState<Role>('student')
   const noticeId = useId()
   const redirectTarget = readRedirectTarget(location.state)
+  // « Se déconnecter » disparaît avec la session : le focus passe au formulaire qui le remplace.
+  const focusFormAfterSignOut = useRef(false)
+
+  useEffect(() => {
+    if (!session && focusFormAfterSignOut.current) {
+      focusFormAfterSignOut.current = false
+      document.getElementById(`${ROLE_ID_PREFIX}-${role}`)?.focus()
+    }
+  }, [session, role])
+
+  function handleSignOut() {
+    focusFormAfterSignOut.current = true
+    signOut()
+  }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -66,7 +111,7 @@ export function LoginPage() {
             </p>
             <p className="login-current__actions">
               <ButtonLink to={homeByRole[session.role]}>Ouvrir mon espace</ButtonLink>
-              <Button variant="secondary" onClick={signOut}>
+              <Button variant="secondary" onClick={handleSignOut}>
                 Se déconnecter
               </Button>
             </p>
@@ -76,6 +121,7 @@ export function LoginPage() {
             <RadioGroup
               legend="Choisissez un profil de démonstration"
               name="role"
+              idPrefix={ROLE_ID_PREFIX}
               value={role}
               onChange={setRole}
               options={(Object.keys(roleLabels) as Role[]).map((value) => ({

@@ -9,7 +9,7 @@ describe('bascule mock / API', () => {
   it('en mode mock, ne fait aucun appel réseau', async () => {
     const fetchSpy = vi.fn<typeof fetch>()
     vi.stubGlobal('fetch', fetchSpy)
-    const api = createApi(
+    const api = await createApi(
       { mode: 'mock', baseUrl: '/api', timeoutMs: 1000 },
       { mock: { latencyMs: 0 } },
     )
@@ -30,7 +30,7 @@ describe('bascule mock / API', () => {
       .fn<typeof fetch>()
       .mockResolvedValue(new Response(JSON.stringify(body), { status: 200 }))
     vi.stubGlobal('fetch', fetchSpy)
-    const api = createApi({ mode: 'http', baseUrl: '/api', timeoutMs: 1000 })
+    const api = await createApi({ mode: 'http', baseUrl: '/api', timeoutMs: 1000 })
 
     await expect(
       api.universities.list({ search: 'valmont', page: 1, pageSize: 5 }),
@@ -46,7 +46,7 @@ describe('bascule mock / API', () => {
       'fetch',
       vi.fn<typeof fetch>().mockRejectedValue(new TypeError('Failed to fetch')),
     )
-    const api = createApi({ mode: 'http', baseUrl: '/api', timeoutMs: 1000 })
+    const api = await createApi({ mode: 'http', baseUrl: '/api', timeoutMs: 1000 })
     await expect(api.universities.list()).rejects.toMatchObject({ kind: 'network' })
   })
 })

@@ -20,6 +20,14 @@ describe('readApiConfig', () => {
     ).toEqual({ mode: 'http', baseUrl: 'https://api.exemple.test/v1', timeoutMs: 2500 })
   })
 
+  it('interdit le mode mock dans un build de production', () => {
+    expect(() => readApiConfig({ VITE_API_MODE: 'mock' }, { production: true })).toThrow(
+      /interdit dans un build de production/,
+    )
+    expect(readApiConfig({ VITE_API_MODE: 'http' }, { production: true }).mode).toBe('http')
+    expect(readApiConfig({}, { production: true }).mode).toBe('http')
+  })
+
   it('refuse un mode inconnu au lieu de basculer silencieusement', () => {
     expect(() => readApiConfig({ VITE_API_MODE: 'fake' })).toThrow(ApiConfigError)
   })

@@ -11,6 +11,7 @@ import { createMockApi } from '@/services/api/mockApi'
 import type { EpiMobilityApi } from '@/services/api/types'
 
 type RenderRouteOptions = Readonly<{
+  /** Rôle imposé ; `undefined` = session lue dans le sessionStorage, comme en réel. */
   role?: Role | null
   /** API injectée ; par défaut le mode mock sans latence. */
   api?: EpiMobilityApi
@@ -19,7 +20,7 @@ type RenderRouteOptions = Readonly<{
 /** Monte l'application complète sur une URL donnée, avec une session de démonstration. */
 export function renderRoute(
   url: string,
-  { role = null, api = createMockApi({ latencyMs: 0 }) }: RenderRouteOptions = {},
+  { role, api = createMockApi({ latencyMs: 0 }) }: RenderRouteOptions = {},
 ) {
   const router = createMemoryRouter(routes, { initialEntries: [url] })
   const user = userEvent.setup()
@@ -27,7 +28,7 @@ export function renderRoute(
   const view = render(
     <StrictMode>
       <ApiProvider api={api}>
-        <SessionProvider initialSession={role ? createDemoSession(role) : null}>
+        <SessionProvider initialSession={role ? createDemoSession(role) : role}>
           <ToastProvider>
             <RouterProvider router={router} />
           </ToastProvider>
