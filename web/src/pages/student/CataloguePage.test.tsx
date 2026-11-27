@@ -34,6 +34,7 @@ describe('Catalogue étudiant (mode mock, sans serveur)', () => {
     expect(await screen.findByText('Aucune destination trouvée')).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Effacer la recherche' }))
+    expect(input).toHaveFocus()
     expect(await screen.findByText('7 destinations trouvées.')).toBeInTheDocument()
   })
 
@@ -43,8 +44,12 @@ describe('Catalogue étudiant (mode mock, sans serveur)', () => {
     expect(within(pagination).getByText('Page 1 sur 2')).toBeInTheDocument()
     expect(within(pagination).getByRole('button', { name: 'Page précédente' })).toBeDisabled()
 
-    await user.click(within(pagination).getByRole('button', { name: 'Page suivante' }))
+    within(pagination).getByRole('button', { name: 'Page suivante' }).focus()
+    await user.keyboard('{Enter}')
+    const results = screen.getByRole('region', { name: 'Destinations partenaires (fictives)' })
+    expect(results).toHaveFocus()
     expect(await screen.findByText('Page 2 sur 2')).toBeInTheDocument()
+    expect(results).toHaveFocus()
     expect(screen.getAllByRole('rowheader')).toHaveLength(2)
   })
 
@@ -72,6 +77,9 @@ describe('Catalogue étudiant (mode mock, sans serveur)', () => {
     serverDown = false
     const callsBeforeRetry = list.mock.calls.length
     await user.click(screen.getByRole('button', { name: 'Réessayer' }))
+    expect(
+      screen.getByRole('region', { name: 'Destinations partenaires (fictives)' }),
+    ).toHaveFocus()
     expect(await screen.findByRole('rowheader', { name: /Valmont/ })).toBeInTheDocument()
     expect(list.mock.calls.length).toBeGreaterThan(callsBeforeRetry)
   })
