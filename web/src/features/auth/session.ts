@@ -12,6 +12,11 @@ export type DemoSession = Readonly<{
 }>
 
 export type SessionContextValue = Readonly<{
+  /**
+   * Connexion simulée autorisée : uniquement en mode mock (développement). En mode `http`,
+   * aucun accès simulé n'est possible ; l'authentification devra venir de l'API.
+   */
+  demoEnabled: boolean
   session: DemoSession | null
   signIn: (role: Role) => void
   signOut: () => void

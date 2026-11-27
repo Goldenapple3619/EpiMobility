@@ -17,7 +17,13 @@ le front-end consomme aujourd'hui afin de servir de base de discussion. Tout él
 
 - `npm run dev` charge `.env.development`, qui active **explicitement** `VITE_API_MODE=mock`.
   Un bandeau « Mode démonstration » est alors affiché sur toutes les pages.
-- Un build de production (`npm run build`) utilise `http` par défaut.
+- Un build de production (`npm run build`) utilise `http` par défaut. **Le mode `mock` y est
+  interdit** (écran « Configuration invalide ») et son code n'est pas inclus dans le bundle :
+  `src/services/api/createApi.ts` ne le charge que par un import dynamique réservé au
+  développement. Vérification : `npm run build && npm run check:bundle`.
+- La **connexion de démonstration n'existe qu'en mode `mock`**. En mode `http`, toute session
+  simulée est ignorée et effacée : les espaces étudiant et administration restent inaccessibles
+  tant que l'authentification réelle (API) n'est pas branchée.
 - **Aucune bascule automatique** : si l'API est indisponible en mode `http`, l'interface affiche
   une erreur et propose de réessayer ; elle ne présente jamais de données fictives à la place.
 - Une valeur invalide bloque le démarrage avec un écran « Configuration invalide ».

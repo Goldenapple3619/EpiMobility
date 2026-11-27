@@ -1,4 +1,5 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useApi } from '@/services/api/useApi'
 import {
   createDemoSession,
   isRole,
@@ -36,25 +37,41 @@ type SessionProviderProps = Readonly<{
 }>
 
 /**
- * Session de démonstration côté navigateur. Elle ne constitue PAS un contrôle d'accès :
- * l'API doit vérifier l'identité et les droits à chaque requête.
+ * Session de démonstration côté navigateur, active UNIQUEMENT en mode mock. Elle ne constitue
+ * PAS un contrôle d'accès : l'API doit vérifier l'identité et les droits à chaque requête.
+ * En mode `http`, toute session simulée (stockée ou imposée) est ignorée et effacée.
  */
 export function SessionProvider({ children, initialSession }: SessionProviderProps) {
-  const [session, setSession] = useState<DemoSession | null>(() =>
+  const demoEnabled = useApi().mode === 'mock'
+  const [demoSession, setSession] = useState<DemoSession | null>(() =>
     initialSession === undefined ? readStoredSession() : initialSession,
   )
+  const session = demoEnabled ? demoSession : null
 
-  const signIn = useCallback((role: Role) => {
-    writeStoredRole(role)
-    setSession(createDemoSession(role))
-  }, [])
+  useEffect(() => {
+    if (!demoEnabled) writeStoredRole(null)
+  }, [demoEnabled])
+
+  const signIn = useCallback(
+    (role: Role) => {
+      if (!demoEnabled) {
+        throw new Error('La connexion de démonstration est désactivée hors mode mock.')
+      }
+      writeStoredRole(role)
+      setSession(createDemoSession(role))
+    },
+    [demoEnabled],
+  )
 
   const signOut = useCallback(() => {
     writeStoredRole(null)
     setSession(null)
   }, [])
 
-  const value = useMemo(() => ({ session, signIn, signOut }), [session, signIn, signOut])
+  const value = useMemo(
+    () => ({ demoEnabled, session, signIn, signOut }),
+    [demoEnabled, session, signIn, signOut],
+  )
 
   return <SessionContext value={value}>{children}</SessionContext>
 }

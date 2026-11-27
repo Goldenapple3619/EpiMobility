@@ -9,10 +9,11 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" vite.config.ts eslint.config.mjs",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" vite.config.ts eslint.config.mjs",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"scripts/**/*.mjs\" vite.config.ts eslint.config.mjs",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"scripts/**/*.mjs\" vite.config.ts eslint.config.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check:bundle": "node scripts/check-prod-bundle.mjs"
   },
   "dependencies": {
     "react": "^19.3.1",
