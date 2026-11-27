@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from 'react'
+import { useId, type ReactNode, type Ref } from 'react'
 import { EmptyState, ErrorState, LoadingState } from './States'
 
 export type TableColumn<Row> = Readonly<{
@@ -20,6 +20,8 @@ type TableProps<Row> = Readonly<{
   onRetry?: () => void
   emptyTitle?: string
   emptyDescription?: ReactNode
+  /** Zone du tableau (toujours montée) : cible de focus après pagination ou relance. */
+  regionRef?: Ref<HTMLDivElement>
 }>
 
 /**
@@ -36,6 +38,7 @@ export function Table<Row>({
   onRetry,
   emptyTitle = 'Aucun élément à afficher',
   emptyDescription,
+  regionRef,
 }: TableProps<Row>) {
   const captionId = useId()
 
@@ -46,7 +49,13 @@ export function Table<Row>({
     stateContent = <EmptyState title={emptyTitle} description={emptyDescription} />
 
   return (
-    <div className="table-wrapper" role="region" aria-labelledby={captionId} tabIndex={0}>
+    <div
+      ref={regionRef}
+      className="table-wrapper"
+      role="region"
+      aria-labelledby={captionId}
+      tabIndex={0}
+    >
       <table className="table" aria-busy={isLoading || undefined}>
         <caption id={captionId}>{caption}</caption>
         <thead>

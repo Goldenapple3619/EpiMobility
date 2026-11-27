@@ -53,6 +53,17 @@ Les interfaces étudiant et administration consomment la même API REST que l'ap
 - Si l'application est servie sous un préfixe (ex. `/panel/`), le définir via l'option `base`
   de Vite : le routeur l'utilise automatiquement comme `basename`.
 
+## Accès aux données (API et mode mock)
+
+- Les pages obtiennent l'API via `useApi()` (`src/services/api`) et chargent leurs données avec
+  `useAsyncResource` (chargement, erreur, relance, annulation automatique).
+- Ne jamais appeler `fetch` directement : passer par le client centralisé `src/services/http/httpClient.ts`.
+- `VITE_API_MODE=mock` (activé par `.env.development`) sert des données fictives locales et affiche
+  un bandeau « Mode démonstration » ; `http` interroge `VITE_API_BASE_URL`. Aucun repli automatique.
+- Les types métier (`src/types/domain.ts`) et les routes sont **provisoires** : voir
+  [`API_CONTRACTS.md`](./API_CONTRACTS.md), notamment la liste des points à valider avec le Backend.
+- Variables `VITE_*` documentées dans `.env.example` : elles sont publiques, aucun secret.
+
 ## Bibliothèque de composants UI
 
 Les composants partagés sont dans `src/components/ui/` et s'importent depuis `@/components/ui`.
