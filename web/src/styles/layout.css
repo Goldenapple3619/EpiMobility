@@ -1,0 +1,273 @@
+/* Layouts applicatifs : en-tête, navigation, fil d'Ariane et pages d'état. */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.page-shell {
+  display: flex;
+  flex-direction: column;
+}
+
+.site-main {
+  flex: 1 0 auto;
+}
+
+/* Zone principale focalisée par programme : pas d'anneau, ce n'est pas un contrôle. */
+.site-main:focus {
+  outline: none;
+}
+
+.site-header__brand {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.brand-link {
+  display: inline-flex;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+
+.space-label {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-pill);
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.site-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  border-bottom: 3px solid transparent;
+}
+
+/* État actif : graisse + soulignement épais, pas seulement une couleur. */
+.site-nav a[aria-current='page'] {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.site-nav a[aria-current='page']:hover {
+  text-decoration: none;
+}
+
+.session-status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.session-status__label {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.session-status__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em; /* un conteneur flex supprime l'espace entre les deux libellés */
+  min-height: 44px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.session-status__hint {
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.session-status__button,
+.button-secondary {
+  min-height: 44px;
+  padding: 0.55rem 1.1rem;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.session-status__button:hover,
+.button-secondary:hover {
+  background: var(--color-surface-muted);
+}
+
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-6) 0 0;
+  list-style: none;
+  font-size: 0.9rem;
+}
+
+.breadcrumb li + li::before {
+  content: '/';
+  margin-inline-end: var(--space-2);
+  color: var(--color-muted);
+}
+
+.breadcrumb a {
+  color: var(--color-primary);
+  font-weight: 650;
+}
+
+.breadcrumb [aria-current='page'] {
+  font-weight: 650;
+  color: var(--color-ink);
+}
+
+.page-section h1,
+.status-page h1 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  letter-spacing: -0.025em;
+}
+
+.page-section__lead {
+  max-width: 65ch;
+  font-size: 1.1rem;
+}
+
+.page-section__narrow {
+  max-width: 720px;
+}
+
+.placeholder-note,
+.notice {
+  max-width: 70ch;
+  padding: var(--space-4) var(--space-6);
+  border: 1px solid var(--color-outline);
+  border-inline-start: 6px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.notice p {
+  margin: 0;
+}
+
+.notice {
+  margin-bottom: var(--space-6);
+}
+
+.status-page__inner {
+  max-width: 720px;
+}
+
+.status-page__code {
+  margin-bottom: var(--space-2);
+  color: var(--color-primary);
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.login-form fieldset {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-6);
+  padding: var(--space-4) var(--space-6);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.login-form legend {
+  padding-inline: var(--space-2);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.choice input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--color-primary);
+}
+
+.login-current__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+button.button-primary {
+  border: 0;
+  cursor: pointer;
+}
+
+/* Espaces étudiant et administration : marque et session en haut, menu sur sa propre rangée. */
+.site-header__inner--app {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'brand session'
+    'nav nav';
+  align-items: center;
+  gap: var(--space-3) var(--space-6);
+  min-height: 0;
+  padding-block: var(--space-4) 0;
+}
+
+.site-header__inner--app .site-header__brand {
+  grid-area: brand;
+}
+
+.site-header__inner--app .site-nav {
+  grid-area: nav;
+}
+
+.site-header__inner--app .session-status {
+  grid-area: session;
+}
+
+@media (max-width: 800px) {
+  .site-header__inner--app {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'brand'
+      'session'
+      'nav';
+    padding-block: var(--space-4) 0;
+  }
+
+  .site-nav ul {
+    gap: var(--space-1) var(--space-4);
+  }
+}
